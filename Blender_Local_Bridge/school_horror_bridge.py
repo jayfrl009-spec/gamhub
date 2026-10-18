@@ -46,7 +46,7 @@ def _cube(name, location, scale, material):
 
 def _build_asset(asset):
     # Track only objects created by this run, so unrelated scene objects are untouched.
-    before_objects = set(bpy.data.objects)
+    before_object_names = {obj.name for obj in bpy.data.objects}
     metal = _material("HorrorBridge_DullMetal", (0.18, 0.20, 0.22), metallic=0.55)
     dark = _material("HorrorBridge_DarkTrim", (0.045, 0.05, 0.06), metallic=0.2)
     wood = _material("HorrorBridge_WornWood", (0.28, 0.20, 0.13), roughness=0.9)
@@ -100,12 +100,10 @@ def _build_asset(asset):
         _cube("School_EntranceStep2", (0, -6.0, 0.52), (6.5, 1.0, 0.25), concrete)
 
         # Repeated front windows keep the model readable without dense geometry.
-        for side in (-1, 1):
-            for x in (-12, -8, -4, 4, 8, 12):
-                _cube("School_FrontWindow", (x, -4.18, 5.7), (2.0, 0.12, 2.4), school_red)
-                _cube("School_FrontWindowGlass", (x, -4.26, 5.7), (1.65, 0.045, 2.05), window_mat)
-                _cube("School_WindowMullion", (x, -4.30, 5.7), (0.07, 0.035, 2.05), dark)
-            break
+        for x in (-12, -8, -4, 4, 8, 12):
+            _cube("School_FrontWindow", (x, -4.18, 5.7), (2.0, 0.12, 2.4), school_red)
+            _cube("School_FrontWindowGlass", (x, -4.26, 5.7), (1.65, 0.045, 2.05), window_mat)
+            _cube("School_WindowMullion", (x, -4.30, 5.7), (0.07, 0.035, 2.05), dark)
 
         # Side windows, split between both long side walls.
         for y in (-2.0, 2.0, 5.0):
@@ -145,7 +143,7 @@ def _build_asset(asset):
     if collection is None:
         collection = bpy.data.collections.new(collection_name)
         bpy.context.scene.collection.children.link(collection)
-    new_objects = [obj for obj in bpy.data.objects if obj not in before_objects]
+    new_objects = [obj for obj in bpy.data.objects if obj.name not in before_object_names]
     for obj in new_objects:
         for old_collection in list(obj.users_collection):
             old_collection.objects.unlink(obj)
