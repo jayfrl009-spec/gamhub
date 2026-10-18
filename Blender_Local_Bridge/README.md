@@ -22,6 +22,7 @@ The add-on accepts only predefined asset names:
 - `locker`
 - `school_desk`
 - `classroom_door`
+- `school_exterior` (low-poly school building, entrance, windows, sign, steps, walkway, shrubs, and roof details)
 
 It rejects arbitrary code and listens on loopback only. Example request from a local Python client (replace TOKEN with the temporary token printed by Blender):
 
@@ -42,5 +43,7 @@ request = urllib.request.Request(
 )
 print(urllib.request.urlopen(request).read().decode("utf-8"))
 ```
+
+To use the new school exterior generator, reload/run the updated add-on and click **Build Whole School Exterior** in the Horror Bridge sidebar. If the old button list remains, restart Blender and enable/run the updated file. The building pieces are grouped into the `SchoolHorror_Assets` collection; select the school pieces you want and export them as FBX or glTF, then use Roblox Studio's **File → Import** flow. Test scale and orientation in Studio before building the rest of the map.
 
 This is a prototype. It does not yet include a ChatGPT-compatible MCP server or automatic Roblox export. The endpoint is intended for trusted local tools only; never forward the port or remove its token check.
